@@ -7,7 +7,8 @@
 #
 # GitHub copies a template's files but not its labels, milestones or branch protection,
 # so this script:
-#   1. fills the {{...}} placeholders from the GitHub repo + git config, drops the
+#   1. fills the {{...}} placeholders in every tracked file from the GitHub repo + git
+#      config (docs frontmatter gets today's date), drops the
 #      template-only README block and itself, then commits (signed off) and pushes to main;
 #   2. creates the `new` label the Issue triage workflow uses;
 #   3. opens the first milestone ("Milestone 0.1.0");
@@ -35,26 +36,41 @@ DESCRIPTION="$(gh repo view --json description --jq .description)"
 AUTHOR="$(git config user.name || true)"
 [ -n "$AUTHOR" ] || AUTHOR="$(gh api user --jq '.name // .login')"
 YEAR="$(date +%Y)"
+DATE="$(date '+%d.%m.%Y %H:%M')"
 
 # --- 1. placeholders --------------------------------------------------------------
 if grep -q '{{PROJECT_NAME}}' README.md 2>/dev/null; then
   [ -z "$(git status --porcelain)" ] || die "working tree not clean; commit or stash first"
   [ -n "$DESCRIPTION" ] || die "set a repo description first: gh repo edit --description '...'"
   echo "Filling placeholders for $REPO"
-  python3 -I - "$NAME" "$DESCRIPTION" "$OWNER" "$YEAR" "$AUTHOR" <<'PY'
-import re, sys
-name, desc, owner, year, author = sys.argv[1:]
+  python3 -I - "$NAME" "$DESCRIPTION" "$OWNER" "$YEAR" "$AUTHOR" "$DATE" <<'PY'
+import re, subprocess, sys
+name, desc, owner, year, author, date = sys.argv[1:]
 subs = {"{{PROJECT_NAME}}": name, "{{PROJECT_DESCRIPTION}}": desc,
-        "{{OWNER}}": owner, "{{YEAR}}": year, "{{AUTHOR}}": author}
-for path in ("README.md", "AGENTS.md", "CONTRIBUTING.md", "NOTICE"):
-    text = open(path, encoding="utf-8").read()
-    text = re.sub(r"\n<!-- template:begin -->.*?<!-- template:end -->\n\n", "\n", text, flags=re.S)
+        "{{OWNER}}": owner, "{{YEAR}}": year, "{{AUTHOR}}": author, "{{DATE}}": date}
+tracked = subprocess.run(["git", "ls-files", "-z"], capture_output=True, text=True,
+                         check=True).stdout.split("\0")
+changed = []
+for path in filter(None, tracked):
+    if path == "scripts/init-repo.sh":
+        continue
+    try:
+        text = open(path, encoding="utf-8").read()
+    except (UnicodeDecodeError, IsADirectoryError):
+        continue
+    new = re.sub(r"\n<!-- template:begin -->.*?<!-- template:end -->\n\n", "\n", text, flags=re.S)
     for key, value in subs.items():
-        text = text.replace(key, value)
-    open(path, "w", encoding="utf-8").write(text)
+        new = new.replace(key, value)
+    if new != text:
+        open(path, "w", encoding="utf-8").write(new)
+        changed.append(path)
+left = [p for p in changed if re.search(r"\{\{[A-Z_]+\}\}", open(p, encoding="utf-8").read())]
+if left:
+    sys.exit(f"init-repo: unknown placeholders left in {left}")
+print(f"  filled {len(changed)} files")
 PY
   git rm -q scripts/init-repo.sh
-  git add README.md AGENTS.md CONTRIBUTING.md NOTICE
+  git add -A
   git commit -q -s -m "chore: initialize from pdca-project-template" \
     -m "Fill the project placeholders and drop the template-only setup script."
   git push -q origin "HEAD:$BRANCH"
