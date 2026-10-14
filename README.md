@@ -24,6 +24,12 @@
 > removes itself and this block in the same commit. GitHub does not copy labels, milestones or
 > protection rules from a template, which is why the script exists.
 >
+> It also ships a starting skeleton for the documentation, after
+> [wyrd](https://github.com/getwyrd/wyrd/tree/main/docs/design): `docs/design/` with the four
+> document classes (specs, architecture, ADRs, proposals), their templates, ADRs 0001–0002 and
+> arc42 chapter skeletons, plus a threat-model skeleton in `.oss-scanner/threat_model.md` for
+> the PDCA security-review leaf. Fill the skeletons as the design settles.
+>
 > Then render the PDCA instance next to it:
 >
 > ```bash
@@ -48,6 +54,12 @@ result bundles and the process log; this repo keeps only the product.
 
 Every change starts from an issue on the open milestone and ships as one pull request that
 closes it. See [CONTRIBUTING.md](CONTRIBUTING.md) and, for coding agents, [AGENTS.md](AGENTS.md).
+
+## Design documentation
+
+[`docs/design/`](docs/design/README.md) holds the architecture overview, the decision records
+(ADRs), proposals and specs. The threat model is
+[`.oss-scanner/threat_model.md`](.oss-scanner/threat_model.md).
 
 ## Releases
 
