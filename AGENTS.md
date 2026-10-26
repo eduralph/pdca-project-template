@@ -16,7 +16,7 @@ agent-specific discipline.
 
 ## Change discipline
 
-- Every change starts from an issue on the open milestone, and the PR body
+- Every change starts from an issue on an open milestone, and the PR body
   carries a closing reference (`Closes #NNN`) — the `require-linked-issue` check
   enforces it.
 - One logical change per issue / branch / PR; split unrelated changes.
