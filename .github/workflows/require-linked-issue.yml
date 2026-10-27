@@ -15,6 +15,9 @@ on:
 permissions:
   contents: read
   pull-requests: read
+  # closingIssuesReferences only returns issues the token can read. In a private
+  # repository that needs issues: read, or every PR looks unlinked.
+  issues: read
 
 jobs:
   require-linked-issue:
