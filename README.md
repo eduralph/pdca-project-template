@@ -41,8 +41,8 @@
 
 ## Status
 
-Early. See the [open milestone](https://github.com/{{OWNER}}/{{PROJECT_NAME}}/milestones) for
-what is in work.
+Early. See the [open milestones](https://github.com/{{OWNER}}/{{PROJECT_NAME}}/milestones) for
+what is in work; the lowest one is the next release.
 
 ## Development process
 
@@ -52,7 +52,7 @@ the companion instance repo
 [pdca-harness](https://github.com/eduralph/pdca-harness). The instance keeps the per-issue
 result bundles and the process log; this repo keeps only the product.
 
-Every change starts from an issue on the open milestone and ships as one pull request that
+Every change starts from an issue on an open milestone and ships as one pull request that
 closes it. See [CONTRIBUTING.md](CONTRIBUTING.md) and, for coding agents, [AGENTS.md](AGENTS.md).
 
 ## Design documentation
@@ -64,15 +64,19 @@ closes it. See [CONTRIBUTING.md](CONTRIBUTING.md) and, for coding agents, [AGENT
 ## Releases
 
 Versions are git tags of the form `vX.Y.0` — a minor bump per release (patch stays `0`);
-each tag is annotated with its release notes (`git show vX.Y.0`). The queue for the next
-release is a single open **GitHub milestone**:
+each tag is annotated with its release notes (`git show vX.Y.0`). Each release is one
+**GitHub milestone**; the implementation arc ([proposal 0001](docs/design/proposals/README.md))
+plans them:
 
-- There is always **one open milestone — the next version to ship** (the highest released
-  tag's minor `+ 1`). It is the live "in work" list.
-- **New issues are filed against that open milestone.** An issue with no milestone carries
-  the `new` label (set by the Issue triage workflow) until it is triaged.
-- **When that version is released** — cut as a `vX.Y.0` tag — its milestone is **closed and a
-  new milestone one minor higher is opened**. New issues then go there. Repeat.
+- **Every planned release has an open milestone.** The first is opened at setup, the rest
+  when the implementation arc plans them. The **lowest open milestone is the next version to
+  ship**; the higher ones collect work already known to belong to a later release.
+- **A new issue is filed against the milestone of the release it belongs to**, or the lowest
+  open one when that is unclear. An issue with no milestone carries the `new` label (set by
+  the Issue triage workflow) until it is triaged.
+- **When a version is released** — cut as a `vX.Y.0` tag — its milestone is **closed**, and
+  the next open milestone becomes the next version to ship. A release beyond the arc gets
+  its milestone when it is planned, by a proposal that extends the arc.
 
 Each change ships as its own pull request with a linked issue (one logical change per PR).
 
