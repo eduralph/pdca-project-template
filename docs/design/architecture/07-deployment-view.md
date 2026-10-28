@@ -9,6 +9,12 @@ tags:
 
 > Living document. Where it runs. Open questions are marked **[OPEN]** inline.
 
+> **How to fill this in:** Where and how it runs: deployment profiles, the substrate,
+> failure domains, ports and protocols, and a worked example of one real deployment. For a
+> library or CLI, say what the user installs and on what. Replace each italic prompt with
+> prose and delete this block once the section describes the real system. Example:
+> [wyrd](https://github.com/getwyrd/wyrd/blob/main/docs/design/architecture/07-deployment-view.md).
+
 ## 7.1 What the user gets
 
 _The deliverable and the machine it runs on._

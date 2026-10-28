@@ -1,13 +1,16 @@
 # Threat model: {{PROJECT_NAME}}
 
-Reviewer-facing summary of what an attacker can reach and how bad each outcome is. The PDCA
-security-review leaf reads this file first and rates every patch against it, so keep it
-current: a change that adds an untrusted input or moves a trust boundary updates this file
-in the same PR. Where the design and the code differ, this file describes the code.
+Reviewer-facing summary of what an attacker can reach and how bad each outcome is, for
+security reviewers and scanners. The PDCA instance's security-review leaf reads this file
+first and rates every patch against it. The full, living threat model is
+[architecture §14](../docs/design/architecture/14-threat-model.md). Where this file and §14
+differ about what exists in code today, this file describes the code and §14 describes the
+design it is growing into. A change that adds an untrusted input or moves a trust boundary
+updates both in the same PR.
 
 _Fill in each section; delete the italic prompts. Models:
 [wyrd](https://github.com/getwyrd/wyrd/blob/main/.oss-scanner/threat_model.md),
-[nl-shell](https://github.com/eduralph/nl-shell/blob/main/.oss-scanner/threat_model.md)._
+[nl-shell](https://github.com/getwyrd/nl-shell/blob/main/.oss-scanner/threat_model.md)._
 
 ## What this project does
 
