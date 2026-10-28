@@ -1,0 +1,28 @@
+# Answers for `copier copy gh:eduralph/pdca-harness ../{{PROJECT_NAME}}-pdca`, the ones every
+# own-repo instance (wyrd-pdca, nl-shell-pdca, autobook-pdca, pdca-pdca) gave. init-repo.sh
+# fills the placeholders; scripts/init-instance.sh passes this file as --data-file and adds
+# the gates runner. Change an answer here before running it if this project differs.
+project_name: "{{PROJECT_NAME}}-pdca"
+project_slug: "{{PROJECT_NAME}}-pdca"
+# Namespaced so several instances on one machine don't collide on one `pdca` command.
+cli_name: "{{PROJECT_NAME}}-pdca"
+project_description: "PDCA quality-cycle instance: drives contributions to {{PROJECT_NAME}} with pdca-harness"
+author_name: "{{AUTHOR}}"
+# Left empty on purpose: it lands in the public instance repo's pyproject.toml.
+author_email: ""
+project_license: Apache-2.0
+tracker_system: github
+tracker_url: "https://github.com/{{OWNER}}/{{PROJECT_NAME}}/issues"
+issue_id_example: "#123"
+default_branch: main
+contribution_model: own-repo
+bundle_root: results
+process_dir: process
+# Claude builds, Codex reviews: the reviewer must be a different vendor from the builder.
+builder_family: claude
+reviewer_family: codex
+interactive_family: claude
+# Every instance switched its leaves from stubs to real commands within days.
+leaves_mode: command
+ship_ci_workflow: true
+ship_merge_guard: true

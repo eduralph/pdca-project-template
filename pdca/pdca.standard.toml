@@ -1,0 +1,86 @@
+# Standard settings for {{PROJECT_NAME}}-pdca, applied to the rendered pdca.toml by
+# scripts/init-instance.sh. These are the settings the existing own-repo instances
+# (wyrd-pdca, nl-shell-pdca, autobook-pdca, pdca-pdca) all ended up turning on by hand.
+#
+# How it is applied:
+#   - [table]: if pdca.toml already has the table, each key below is set inside it
+#     (replacing the key's line, or added under the header); otherwise the block is
+#     appended.
+#   - [[array]]: the block is appended, unless pdca.toml already has an active entry with
+#     the same `id` (or, for entries without an id, any active entry of that array), which
+#     the script reports and leaves alone.
+# Comments directly above a block travel with it.
+
+# Bound every headless leaf's memory; without it a runaway reviewer probe can take the
+# whole host (pdca-harness#779). Interactive leaves can opt out with memory_max = "off".
+[driver]
+leaf_memory_max = "16G"
+
+# The cheap size judgment before Do; it can only raise the driver's size band, never
+# lower it. Ships as a stub so `copier update` never turns on a model call by itself.
+[leaves.sizer]
+mode = "command"
+
+# Commit finished result bundles to this instance repo, so their history isn't on one
+# machine only.
+[records]
+mode = "commit"
+subject = "chore(records): record {n} result bundle(s)"
+
+# The planner reads the issue thread from the product's tracker. The product's design
+# documents are read in place under ../{{PROJECT_NAME}} (docs/INTEGRATION.md §2), not
+# copied into the bundle.
+[[plan.source]]
+type = "github"
+role = "tracker"
+repo = "{{OWNER}}/{{PROJECT_NAME}}"
+
+# A bundle that fails Check and comes back to Do gets a stronger builder from the 2nd
+# attempt on.
+[[leaves.builder_escalation]]
+min_iteration = 2
+argv = ["claude", "-p", "--agent", "builder", "--model", "opus", "--permission-mode", "acceptEdits", "--allowedTools", "Read,Edit,Write,Bash,Grep,Glob"]
+
+# Advisory reviewers. They annotate SUMMARY §6 and never gate. Until pdca-harness#795
+# ships a copier answer for them, they are turned on here. The advisory pool runs
+# concurrently, so each gets its own smaller memory cap.
+[[leaves.advisory]]
+id = "adversary"
+role = "refute the red→green evidence and the reviewer's verdict; find the input that breaks the fix"
+mode = "command"
+family = "claude"
+memory_max = "8G"
+argv = ["claude", "-p", "--agent", "adversary", "--permission-mode", "acceptEdits", "--allowedTools", "Read,Bash,Grep,Glob"]
+
+# Rates every patch against ../{{PROJECT_NAME}}/.oss-scanner/threat_model.md. Its role
+# prompt comes from pdca/agents/security-review.md until pdca-harness#794 ships it.
+[[leaves.advisory]]
+id = "security-review"
+role = "security: what an attacker controlling the patch's inputs could do, rated against the target's threat model"
+mode = "command"
+family = "claude"
+memory_max = "8G"
+argv = ["claude", "-p", "--agent", "security-review", "--permission-mode", "acceptEdits", "--allowedTools", "Read,Bash,Grep,Glob"]
+
+# Refutes the brief before Do: wrong root cause, untestable success criterion, hidden scope.
+[[leaves.plan_advisory]]
+id = "plan-reviewer"
+role = "refute the brief: wrong root cause, untestable success criterion, hidden scope"
+mode = "command"
+family = "claude"
+memory_max = "8G"
+argv = ["claude", "-p", "--agent", "plan-reviewer", "--permission-mode", "acceptEdits", "--allowedTools", "Read,Bash,Grep,Glob"]
+
+[[doctor.checks]]
+group = "target"
+id = "sibling checkout ../{{PROJECT_NAME}}"
+cmd = "test -e ../{{PROJECT_NAME}}/.git"
+hint = "git clone https://github.com/{{OWNER}}/{{PROJECT_NAME}}.git ../{{PROJECT_NAME}}"
+required = true
+
+[[doctor.checks]]
+group = "target"
+id = "threat model (security-review leaf)"
+cmd = "test -f ../{{PROJECT_NAME}}/.oss-scanner/threat_model.md"
+hint = "the security-review advisory leaf rates every patch against it; restore it in {{PROJECT_NAME}}"
+level = "WARN"

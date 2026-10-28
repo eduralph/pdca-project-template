@@ -1,0 +1,92 @@
+# Answers for the instance's docs/INTEGRATION.md that a product made from
+# pdca-project-template already gives, modelled on wyrd-pdca's. scripts/init-instance.sh
+# replaces each `find` line (matched exactly, once) with `replace`. A `find` that is no
+# longer in the rendered file (pdca-harness changed its wording) is reported and skipped;
+# fill that item by hand.
+
+[[fill]]
+find = "> Copier pre-filled what it could from your answers. Everything marked **TODO**"
+replace = """> **Host repo:** {{PROJECT_NAME}}, at the sibling checkout `../{{PROJECT_NAME}}`
+> (`https://github.com/{{OWNER}}/{{PROJECT_NAME}}`). This instance is **out-of-tree**: it
+> keeps the result bundles and the process log, never modifies the product's tree outside
+> a fix, and reads the product's design documents in place. The product's process is
+> recorded in its ADRs (`../{{PROJECT_NAME}}/docs/design/adr/`) and
+> `../{{PROJECT_NAME}}/docs/governance/GOVERNANCE.md`; those are the normative sources cited
+> below.
+>
+> Copier pre-filled what it could from your answers. Everything marked **TODO**"""
+
+# §1 Tracker integration
+[[fill]]
+find = "- **Cross-link form (commit/PR → tracker):** TODO (e.g. `Fixes #nnnn` for GitHub Issues)"
+replace = "- **Cross-link form (commit/PR → tracker):** `Fixes #<id>` in the PR body (`[tracker].issue_trailer`); `Refs #<id>` for partial work. The product's required `require-linked-issue` check fails a PR with neither."
+
+[[fill]]
+find = "- **Per-release field updated on a fix:** TODO"
+replace = "- **Per-release field updated on a fix:** the milestone. Every issue sits on the milestone of the release it ships in; the lowest open milestone is the next release (product README, Releases)."
+
+# §2 Branch-target rules
+[[fill]]
+find = "- **Cross-version cherry-pick rules:** TODO / none"
+replace = "- **Cross-version cherry-pick rules:** none; there are no maintenance branches."
+
+[[fill]]
+find = "- **Master-vs-maintenance rule:** TODO (cite the project's own statement)"
+replace = """- **Master-vs-maintenance rule:** every change targets `main`. Releases are `vX.Y.0` tags
+  cut from `main` (product README, Releases).
+- **Immutability rule (host-enforced):** the product's `docs-immutability` check forbids
+  editing an Accepted ADR, an accepted proposal or a stable spec
+  (`../{{PROJECT_NAME}}/docs/design/adr/`, ADR-0001, ADR-0004). A Plan that needs to change
+  one authors a **new** document carrying `supersedes:`; the old file changes only its
+  `status:`.
+- **Plan foundation, the design corpus read in place (never copied):** ground a brief on
+  the tracker issue **and** on `../{{PROJECT_NAME}}/docs/design/`: ADRs (`adr/`), proposals
+  (`proposals/`), the architecture overview (`architecture/`, with the threat model in §14)
+  and specs (`specs/`), indexed by `docs/design/README.md`. Read them with `git -C
+  ../{{PROJECT_NAME}} …`, Read and Grep; they are reference, not bundle artifacts, so they
+  are not wired as copy-based `[[plan.source]]` providers."""
+
+# §5 Upstream-isn't-ahead routine
+[[fill]]
+find = "- **What \"upstream\" is:** TODO (canonical URL, branches, fork relationship)"
+replace = "- **What \"upstream\" is:** **N/A**: {{PROJECT_NAME}} is its own upstream, not a fork, so there is no prior-art-in-upstream search. (Kept as an explicit \"none\" so a future fork relationship is a deliberate addition, not a silent gap.)"
+
+[[fill]]
+find = "- **Search routine + tokenization gotchas:** TODO (search by affected file path)"
+replace = "- **Search routine + tokenization gotchas:** N/A (no upstream)."
+
+[[fill]]
+find = "- **Merged-history check command:** TODO (`git log` / `gh search` invocation)"
+replace = "- **Merged-history check command:** N/A (no upstream)."
+
+# §6 Brief and design-proposal templates
+[[fill]]
+find = "- **Required project-specific frontmatter/sections:** TODO / none"
+replace = """- **Plan reference:** where the issue links an existing ADR, proposal or spec in
+  `../{{PROJECT_NAME}}/docs/design/`, the Plan points at it rather than restating it. A
+  design-proposal draft for {{PROJECT_NAME}} starts from
+  `../{{PROJECT_NAME}}/docs/design/templates/proposal.md`.
+- **Required project-specific frontmatter/sections:** the linked issue, and the ADR,
+  proposal or spec the change implements, if any."""
+
+# §8 Committing and PR conventions
+[[fill]]
+find = "- **Commit-message format:** TODO (subject length, wrap column, trailer, refs)"
+replace = "- **Commit-message format:** a conventional prefix (`fix:`, `feat:`, `docs:`, `ci:`, `chore:`), a body that explains why, and a DCO `Signed-off-by:` trailer (`git commit -s`), per the product's CONTRIBUTING.md and AGENTS.md."
+
+[[fill]]
+find = "- **Enforcement mechanism:** TODO (commit-msg hook / PR CI / human review)"
+replace = "- **Enforcement mechanism:** the product's required checks on `main` (`dco`, `require-linked-issue`, `docs-immutability`, admins included), then human review at the ready-mark."
+
+# §10 Maintainer and governance
+[[fill]]
+find = "- **Ready-mark gate:** TODO (who marks PRs ready, and the convention before the mark)"
+replace = "- **Ready-mark gate:** PRs open as **draft**; the maintainer re-reads, marks ready and merges. The builder and publisher leaves never `gh pr ready` / `gh pr merge` (blocked by `.claude/hooks/builder_guard.py`; the product's AGENTS.md states the same STOP rule)."
+
+[[fill]]
+find = "- **External-contribution flow differences:** TODO / none"
+replace = "- **External-contribution flow differences:** none: an outside PR against `main` passes the same required checks (product CONTRIBUTING.md and the shared contributing guide)."
+
+[[fill]]
+find = "- **MAINTAINERS file:** TODO / none"
+replace = "- **MAINTAINERS file:** `../{{PROJECT_NAME}}/docs/governance/GOVERNANCE.md` is the authority (roles and decision rules); no separate MAINTAINERS file."

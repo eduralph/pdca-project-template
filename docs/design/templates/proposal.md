@@ -1,27 +1,30 @@
 ---
 created: <DD.MM.YYYY HH:MM>
 type: proposal
-status: draft   # draft | accepted | implemented | withdrawn
+status: draft   # draft | accepted | implemented | superseded | withdrawn
 author:
 tracking-issue:
+supersedes:
 tags:
   - proposal
 ---
 # Proposal: <title>
 
 > Enhancement proposals (KEP/RFC-style) are how larger changes and milestone plans are
-> proposed. Move this file from `draft/` to `accepted/` when accepted; an accepted proposal
-> is never edited — a later proposal supersedes it, recorded in `../proposals/README.md`.
-> If a decision is foundational rather than a change, it may instead warrant an ADR.
+> proposed. Copy this file to `../proposals/draft/NNNN-short-title.md` (next free number) and
+> add a row to `../proposals/README.md`. When accepted, move it to `accepted/` and set
+> `status: accepted`; from then on it is never edited (ADR-0003). If the decision is
+> foundational rather than a change, it may instead warrant an ADR.
 
 ## Motivation
 
-What problem does this solve? Why now? What does the user see?
+What problem does this solve? Why now? What is the user- or operator-visible need?
 
 ## Design
 
-The proposed change. Be concrete about the affected components and about any effect on the
-properties the threat model says must hold — those carry the highest bar.
+The proposed change. Be concrete about interfaces, the affected components
+(architecture §5), and any effect on the headline promise (§1.2) or on a stable
+specification — those carry the highest bar.
 
 ## Alternatives considered
 
@@ -29,18 +32,19 @@ What else was weighed, and why this over those?
 
 ## Graduation criteria
 
-How do we know it is done and correct? Which tests, which quality scenarios (architecture
-§10), and what definition of done?
+How do we know it is done and correct? Which tests, which quality scenarios
+(architecture §10), and what definition of done?
 
 ## Security impact
 
-Which untrusted inputs from `.oss-scanner/threat_model.md` does this touch? Does it add a
-new one, or change what is trusted? Update the threat model in the same change if so.
+Which untrusted inputs from the threat model (architecture §14) does this touch? Does it
+add a new one, or change what is trusted? Update the threat model in the same change if so.
 
 ## Backward compatibility
 
-Effect on existing data, configs, deployments and the public interface.
+Effect on existing data, configuration, deployments, and the public interface.
 
 ## Open questions
 
-Mark unresolved points explicitly.
+Mark unresolved points explicitly. A proposal is accepted only when none remain open
+(see `../../governance/GOVERNANCE.md`).
