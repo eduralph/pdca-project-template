@@ -4,7 +4,7 @@
 
 Closes #
 
-<!-- Every PR links an issue, docs fixes included. Use "Refs #N" for partial work. -->
+<!-- Every PR links an issue, typo and docs fixes included. Use "Refs #N" for partial work. -->
 
 ## Checklist
 
