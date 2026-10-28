@@ -4,6 +4,11 @@ Thanks for contributing. This project is licensed under the
 [Apache License, Version 2.0](LICENSE); contributions are accepted under the same
 license.
 
+Read the [shared contributing guide](https://github.com/{{OWNER}}/.github/blob/main/CONTRIBUTING.md)
+first. It covers what won't be merged and the rules for AI-assisted changes. This project
+is stricter on one point: **every** pull request links an issue, typo and docs fixes
+included (see [Engineering discipline](#engineering-discipline)).
+
 ## Developer Certificate of Origin (sign-off)
 
 Contributions are gated on the [Developer Certificate of Origin](DCO) (DCO 1.1).

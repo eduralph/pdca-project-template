@@ -12,8 +12,9 @@
 #      template-only README block and itself, then commits (signed off) and pushes to main;
 #   2. creates the `new` label the Issue triage workflow uses;
 #   3. opens the first milestone ("Milestone 0.1.0");
-#   4. turns off the wiki and protects main: `require-linked-issue` required, admins
-#      included, conversations resolved, no force-push or deletion.
+#   4. turns off the wiki, turns on private vulnerability reporting and protects main:
+#      `require-linked-issue` required, admins included, conversations resolved, no
+#      force-push or deletion.
 #
 # Steps 2-4 are idempotent; re-running after step 1 only re-applies settings.
 set -euo pipefail
@@ -93,6 +94,8 @@ fi
 
 # --- 4. repo settings + branch protection ------------------------------------------
 gh repo edit "$REPO" --enable-wiki=false >/dev/null
+gh api -X PUT "repos/$REPO/private-vulnerability-reporting" >/dev/null
+echo "Private vulnerability reporting on, wiki off"
 gh api -X PUT "repos/$REPO/branches/$BRANCH/protection" --input - >/dev/null <<'JSON'
 {
   "required_status_checks": {"strict": false, "contexts": ["require-linked-issue"]},
