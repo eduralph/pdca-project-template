@@ -19,8 +19,8 @@
 > ```
 >
 > `init-repo.sh` replaces the `{{…}}` placeholders, commits and pushes that once to `main`,
-> creates the `new` label and the first milestone (`Milestone 0.1.0`), then turns on branch
-> protection (`require-linked-issue` required, admins included, conversations resolved). It
+> creates the `new` label and the first milestone (`Milestone 0.1.0`), turns on private
+> vulnerability reporting, then turns on branch protection (`require-linked-issue` required, admins included, conversations resolved). It
 > removes itself and this block in the same commit. GitHub does not copy labels, milestones or
 > protection rules from a template, which is why the script exists.
 >
