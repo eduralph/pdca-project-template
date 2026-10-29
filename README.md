@@ -37,9 +37,12 @@
 >
 > `init-repo.sh` asks for the license (Apache-2.0 by default), the contact address for
 > conduct and policy reports, and the package ecosystem for Dependabot. It replaces the
-> `{{…}}` placeholders and commits and pushes that once to `main`, removing this block. It
-> then creates the labels and the first milestone (`Milestone 0.1.0`) and runs
-> `scripts/repo-settings.py apply`, which deletes branches after merge, turns on the security
+> `{{…}}` placeholders and commits and pushes that once to `main`, removing this block. For
+> `cargo` it also pins the RustSec advisory database the gate audits (`scripts/advisory-db.sh`,
+> `deny.toml`): Dependabot moves the pin daily, and a daily workflow checks `main` against
+> the newest database and opens an issue for a new advisory. It then creates the labels and
+> the first milestone (`Milestone 0.1.0`) and runs `scripts/repo-settings.py apply`, which
+> deletes branches after merge, turns on the security
 > settings (vulnerability reporting, Dependabot security updates, secret scanning with push
 > protection and generic-secret patterns, CodeQL code scanning, a read-only Actions token,
 > the immutable OIDC subject), and protects `main` (PRs required; the checks in
