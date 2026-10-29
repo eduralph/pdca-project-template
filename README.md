@@ -15,7 +15,9 @@
 >   [shared one](https://github.com/eduralph/.github/blob/main/CONTRIBUTING.md);
 > - issue handling: bug and enhancement templates, the `new` label kept in step with the
 >   milestone, and automated priority triage (ADR-0005) that stays off until it is set up;
-> - SECURITY.md, Dependabot, the agent rules in AGENTS.md and Claude Code permissions.
+> - SECURITY.md, Dependabot, the agent rules in AGENTS.md and Claude Code permissions;
+> - hardened workflows: every action pinned to a commit hash, no credentials left after
+>   checkout, CodeQL code scanning, and a weekly OpenSSF Scorecard run.
 >
 > On top of that it adds the PDCA parts: one milestone per planned release, and the standard
 > setup for the companion **instance** repo that runs the cycle (`pdca/`). The instance is
@@ -38,11 +40,12 @@
 > `{{…}}` placeholders and commits and pushes that once to `main`, removing this block. It
 > then creates the labels and the first milestone (`Milestone 0.1.0`), deletes branches after
 > merge, turns on the security settings (vulnerability reporting, Dependabot security
-> updates, secret scanning with push protection and generic-secret patterns, a read-only
-> Actions token, the immutable OIDC subject), and protects `main` (PRs required; `dco`,
-> `docs-check`, `docs-immutability`, `gate` and `require-linked-issue` required; admins
-> included). GitHub doesn't copy labels, milestones, settings or protection rules from a
-> template, which is why the script exists. At the end it prints what is left to do by hand.
+> updates, secret scanning with push protection and generic-secret patterns, CodeQL code
+> scanning, a read-only Actions token, the immutable OIDC subject), and protects `main` (PRs
+> required; `dco`, `docs-check`, `docs-immutability`, `gate` and `require-linked-issue`
+> required; admins included). GitHub doesn't copy labels, milestones, settings or protection
+> rules from a template, which is why the script exists. At the end it prints what is left to
+> do by hand.
 >
 > `init-instance.sh` runs `copier copy` from pdca-harness into `../<name>-pdca` with the
 > answers in `pdca/copier-answers.yml`, applies `pdca/pdca.standard.toml` to its
