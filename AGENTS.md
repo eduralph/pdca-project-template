@@ -27,6 +27,19 @@ agent-specific discipline.
   onto it, resolve conflicts locally, rerun checks, and push with
   `--force-with-lease`.
 
+## Workflows
+
+- Pin every action to a full commit hash with its release as a comment
+  (`uses: actions/checkout@<40-char sha> # v7.0.1`), never to a tag or branch. Pick a
+  release at least two weeks old; Dependabot keeps pins current.
+- Give every `actions/checkout` `persist-credentials: false`, and each job only the
+  `permissions:` it needs.
+- `template-test` checks the first two in the template repository; Scorecard reports them
+  in every repo.
+- A job that branch protection requires is listed in `.github/required-checks.txt`. When
+  you rename, add or drop one, change the file in the same PR and tell the maintainer to
+  run `python3 -I scripts/repo-settings.py apply` after the merge; it needs admin rights.
+
 ## Publishing defaults
 
 - Open draft PRs unless the user explicitly asks for ready-for-review.
