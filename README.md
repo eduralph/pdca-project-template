@@ -38,14 +38,18 @@
 > `init-repo.sh` asks for the license (Apache-2.0 by default), the contact address for
 > conduct and policy reports, and the package ecosystem for Dependabot. It replaces the
 > `{{…}}` placeholders and commits and pushes that once to `main`, removing this block. It
-> then creates the labels and the first milestone (`Milestone 0.1.0`), deletes branches after
-> merge, turns on the security settings (vulnerability reporting, Dependabot security
-> updates, secret scanning with push protection and generic-secret patterns, CodeQL code
-> scanning, a read-only Actions token, the immutable OIDC subject), and protects `main` (PRs
-> required; `dco`, `docs-check`, `docs-immutability`, `gate` and `require-linked-issue`
-> required; admins included). GitHub doesn't copy labels, milestones, settings or protection
-> rules from a template, which is why the script exists. At the end it prints what is left to
-> do by hand.
+> then creates the labels and the first milestone (`Milestone 0.1.0`) and runs
+> `scripts/repo-settings.py apply`, which deletes branches after merge, turns on the security
+> settings (vulnerability reporting, Dependabot security updates, secret scanning with push
+> protection and generic-secret patterns, CodeQL code scanning, a read-only Actions token,
+> the immutable OIDC subject), and protects `main` (PRs required; the checks in
+> `.github/required-checks.txt` required; admins included). GitHub doesn't copy labels,
+> milestones, settings or protection rules from a template, which is why the script exists.
+> At the end it prints what is left to do by hand.
+>
+> `repo-settings.py` stays in the new repo. `python3 -I scripts/repo-settings.py check`
+> reads the settings back at any time and lists any that have changed; `apply` sets them
+> again.
 >
 > `init-instance.sh` runs `copier copy` from pdca-harness into `../<name>-pdca` with the
 > answers in `pdca/copier-answers.yml`, applies `pdca/pdca.standard.toml` to its
@@ -54,7 +58,8 @@
 > Once the instance is set up, delete `pdca/` and `scripts/init-instance.sh` from this repo.
 >
 > Changes to the template itself are tested by `template-test`, which runs `init-repo.sh`
-> against a stub `gh` (`.github/template-test/`). It runs only in the template repo.
+> and `repo-settings.py` against a fake GitHub (`.github/template-test/`). It runs only in
+> the template repo.
 <!-- template:end -->
 
 ## Status

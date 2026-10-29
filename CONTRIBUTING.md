@@ -50,6 +50,12 @@ _TODO: name the single command that runs every check._ The required `gate` job i
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs the same command; until it is
 set up, `gate` fails every pull request.
 
+The status checks `main` requires are listed in
+[`.github/required-checks.txt`](.github/required-checks.txt). A maintainer can see whether
+the repo's settings and branch protection still match it, and the rest of the settings
+the project expects, with `python3 -I scripts/repo-settings.py check`; `apply` restores
+them.
+
 ## How changes are made here
 
 The cycle that drives changes here is run from the companion PDCA instance repo,
