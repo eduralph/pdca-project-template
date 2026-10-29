@@ -65,6 +65,13 @@ agent-specific discipline.
     the current system; update it in the same PR whenever the system changes.
   - **Review** (`docs/design/reviews/`) — a dated go/no-go or readiness assessment.
 - **Start from the template** in `docs/design/templates/` and add a row to the class index.
+  For an ADR, follow [How an ADR is made](docs/design/adr/README.md#how-an-adr-is-made).
+- **Never accept a design document.** Write ADRs as `Proposed` and proposals and specs as
+  `draft`; changing the status to Accepted, accepted or stable is the maintainer's act
+  after the architecture board agrees, like the merge.
+- **Keep relative links working.** `docs-check` fails a PR with a Markdown link to a file or
+  directory that isn't in the repo; run `python3 -I .github/docs-check/docs_links.py` before
+  pushing a rename.
 - **Changing a ratified doc = supersede, never rewrite.** Once an ADR is Accepted, a
   proposal accepted or a spec stable, its file is frozen (`docs-immutability` enforces
   this). To change it, write a **new** doc carrying `supersedes: <old>`, change only the old
