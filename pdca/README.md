@@ -12,7 +12,7 @@ pdca-pdca) all ended up with after turning settings on by hand:
 | File | What it holds |
 |---|---|
 | `copier-answers.yml` | The copier answers: own-repo, Claude builds, Codex reviews, GitHub tracker, `main`, real leaves instead of stubs. |
-| `pdca.standard.toml` | Settings merged into the instance's `pdca.toml`: a 16G memory bound per leaf, the sizer on, Opus from the 2nd build attempt, results committed, the planner reading this repo's issues, the `adversary`, `security-review` and `plan-reviewer` advisory reviewers, and doctor checks for the sibling checkout and the threat model. |
+| `pdca.standard.toml` | Settings merged into the instance's `pdca.toml`: a 16G memory bound per leaf, the sizer on, Opus from the 2nd build attempt, Opus at high effort for the planner and sign-off sessions, results committed, the planner reading this repo's issues, the `adversary`, `security-review` and `plan-reviewer` advisory reviewers, and doctor checks for the sibling checkout and the threat model. |
 | `agents/security-review.md` | The security reviewer's role prompt. It rates each patch against `.oss-scanner/threat_model.md` in this repo. |
 | `integration.toml` | Answers for the instance's `docs/INTEGRATION.md` that this template already gives: how PRs link issues, milestones as the release field, no maintenance branches, accepted docs superseded rather than edited, design docs read in place, no upstream, commit conventions and governance. |
 | `apply.py` | Applies the three files above to a rendered instance. |
