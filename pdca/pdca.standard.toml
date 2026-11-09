@@ -71,6 +71,17 @@ family = "claude"
 memory_max = "8G"
 argv = ["claude", "-p", "--agent", "plan-reviewer", "--permission-mode", "acceptEdits", "--allowedTools", "Read,Bash,Grep,Glob"]
 
+# The two interactive leaves a human sits in. Pinned, because unset the `claude` CLI takes
+# the operator's ~/.claude/settings.json default, so a session opens in whatever model the
+# operator last chose interactively, not a choice this instance made.
+[leaves.planner]
+model = "opus"
+effort = "high"
+
+[leaves.signoff]
+model = "opus"
+effort = "high"
+
 [[doctor.checks]]
 group = "target"
 id = "sibling checkout ../{{PROJECT_NAME}}"
