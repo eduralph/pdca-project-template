@@ -262,10 +262,10 @@ python3 -I scripts/repo-settings.py apply "$REPO" || SETTINGS=$?
 # copies kept in the git directory, so a branch checked out later (a fork PR) cannot redefine
 # what runs on commit.
 if command -v pre-commit >/dev/null 2>&1; then
-  git show HEAD:.secret-guard/activate.sh | SECRET_GUARD_REF=HEAD sh ||
-    echo "secret guard NOT active: run git show origin/HEAD:.secret-guard/activate.sh | sh" >&2
+  s=$(git show HEAD:.secret-guard/activate.sh) && SECRET_GUARD_REF=HEAD sh -c "$s" activate ||
+    echo "secret guard NOT active: run s=$(git show origin/HEAD:.secret-guard/activate.sh) && sh -c "$s" activate" >&2
 else
-  echo "pre-commit not found: pipx install pre-commit==4.7.0, then: git show origin/HEAD:.secret-guard/activate.sh | sh"
+  echo "pre-commit not found: pipx install pre-commit==4.7.0, then: s=$(git show origin/HEAD:.secret-guard/activate.sh) && sh -c "$s" activate"
 fi
 
 # --- 4. what is left by hand ---------------------------------------------------------
@@ -276,7 +276,7 @@ cat <<EOF
 
 Done. Left to do by hand:
   - In every other clone of this repo, activate the secret guard once:
-    git show origin/HEAD:.secret-guard/activate.sh | sh
+    s=$(git show origin/HEAD:.secret-guard/activate.sh) && sh -c "$s" activate
   - Render the PDCA instance: scripts/init-instance.sh (see pdca/README.md), then
     delete pdca/ and scripts/init-instance.sh from this repo in a PR.
   - File issues against '$FIRST_MILESTONE'; every change goes through a PR that links one.
