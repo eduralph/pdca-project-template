@@ -258,10 +258,14 @@ python3 -I scripts/repo-settings.py apply "$REPO" || SETTINGS=$?
 # .pre-commit-config.yaml blocks Claude Code's machine-local settings (which record
 # approved commands verbatim, tokens included) and leaked credentials. Git hooks are
 # not cloned, so it only runs once activated in each clone.
+# The default branch is the main just initialized, so activate from HEAD. The hook reads
+# copies kept in the git directory, so a branch checked out later (a fork PR) cannot redefine
+# what runs on commit.
 if command -v pre-commit >/dev/null 2>&1; then
-  pre-commit install
+  s=$(PATH=/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin git show HEAD:.secret-guard/activate.sh) && SECRET_GUARD_REF=HEAD /bin/sh -c "$s" activate ||
+    echo 'secret guard NOT active; run: s=$(PATH=/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin git show refs/remotes/origin/HEAD:.secret-guard/activate.sh) && /bin/sh -c "$s" activate' >&2
 else
-  echo "pre-commit not found: pipx install pre-commit && pre-commit install"
+  echo 'pre-commit not found: pipx install pre-commit==4.7.0, then: s=$(PATH=/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin git show refs/remotes/origin/HEAD:.secret-guard/activate.sh) && /bin/sh -c "$s" activate'
 fi
 
 # --- 4. what is left by hand ---------------------------------------------------------
@@ -272,7 +276,7 @@ cat <<EOF
 
 Done. Left to do by hand:
   - In every other clone of this repo, activate the secret guard once:
-    pipx install pre-commit && pre-commit install
+    s=\$(PATH=/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin git show refs/remotes/origin/HEAD:.secret-guard/activate.sh) && /bin/sh -c "\$s" activate
   - Render the PDCA instance: scripts/init-instance.sh (see pdca/README.md), then
     delete pdca/ and scripts/init-instance.sh from this repo in a PR.
   - File issues against '$FIRST_MILESTONE'; every change goes through a PR that links one.
